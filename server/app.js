@@ -3,27 +3,17 @@ const app = express();
 const cors = require("cors");
 const fs = require("fs");
 const bookRouter = require("./routes/bookRoutes");
+const authRouter = require("./routes/authRoutes");
 
 app.use(cors());
 app.use(express.json());
 
-// let books = [{ title: "book1" }, { title: "book2" }];
-// let books = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/books.json`));
-// let books = Book.find();
-// console.log(books);
+app.use("/", (req, res, next) => {
+  console.log("middleware");
+  next();
+});
 
 app.use("/books", bookRouter);
-
-// app.get("/books", (req, res) => {
-//   // res.json(books);
-//   bookController.getAllBooks();
-// });
-
-app.post("/books", (req, res) => {
-  let title = req.body.title;
-  books.push({ title: title });
-
-  res.json({ success: true });
-});
+app.use("/login", authRouter);
 
 module.exports = app;
