@@ -11,7 +11,13 @@ exports.login = (req, res) => {
 
   if (persistedUser) {
     let token = jwt.sign({ username: username }, "someprivatekey");
-    res.status(200).json({ token: token });
+    res.status(200).json({
+      status: "success",
+      token,
+      data: {
+        persistedUser
+      }
+    });
   } else {
     res.status(401).json({ error: "Invalid credentials" });
   }
