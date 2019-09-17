@@ -4,15 +4,12 @@ const cors = require("cors");
 const fs = require("fs");
 const bookRouter = require("./routes/bookRoutes");
 const authRouter = require("./routes/authRoutes");
+const authController = require("./controllers/authController");
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/", (req, res, next) => {
-  next();
-});
-
-app.use("/books", bookRouter);
+app.use("/books", authController.authenticate, bookRouter);
 app.use("/login", authRouter);
 
 module.exports = app;
