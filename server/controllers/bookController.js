@@ -1,15 +1,22 @@
 const Book = require("../models/bookModel");
 
 exports.getAllBooks = async (req, res, next) => {
-  const books = await Book.find();
+  try {
+    const books = await Book.find();
 
-  res.status(200).json({
-    status: "success",
-    results: books.length,
-    data: {
-      books
-    }
-  });
+    res.status(200).json({
+      status: "success",
+      results: books.length,
+      data: {
+        books
+      }
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error
+    });
+  }
 };
 
 exports.addBook = async (req, res, next) => {
@@ -21,21 +28,31 @@ exports.addBook = async (req, res, next) => {
       data: book
     });
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({
+      status: "fail",
+      message: error
+    });
   }
 };
 
 exports.deleteBook = async (req, res, next) => {
-  const book = await Book.findByIdAndDelete(req.params.id);
+  try {
+    const book = await Book.findByIdAndDelete(req.params.id);
 
-  if (!book) {
-    console.log("none found");
+    if (!book) {
+      console.log("none found");
+    }
+
+    res.status(204).json({
+      status: "success",
+      data: null
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error
+    });
   }
-
-  res.status(204).json({
-    status: "success",
-    data: null
-  });
 };
 
 exports.udpateBook = async (req, res, next) => {
